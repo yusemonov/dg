@@ -1,0 +1,27 @@
+from django.http import HttpResponseRedirect
+from django.http.response import HttpResponse
+from django.shortcuts import render
+
+from .forms import DocForm
+
+
+def get_name(request):
+    if request.method == 'POST':
+        form = DocForm(request.POST)
+        if form.is_valid():
+            document_type = form.cleaned_data['document_type']
+            document_country = form.cleaned_data['document_country']
+            document_surname = form.cleaned_data['document_surname']
+            document_given_name = form.cleaned_data['document_given_name']
+            document_number = form.cleaned_data['document_number']
+            document_nationality = form.cleaned_data['document_nationality']
+            document_birth_date = form.cleaned_data['document_birth_date']
+            document_genre = form.cleaned_data['document_genre']
+            document_exp_date = form.cleaned_data['document_exp_date']
+            document_id_number = form.cleaned_data['document_id_number']
+            return document_type, document_country
+
+    else:
+        form = DocForm()
+
+    return render(request, 'iii.html', {'form': form})

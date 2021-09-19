@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "source_podliver"
+version = "0.1.0"
+description = ""
+authors = ["sshmudio <sshmudio@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^3.2.7"
+django-jazzmin = "^2.4.8"
+celery = "^5.1.2"
+redis = "^3.5.3"
+django-widget-tweaks = "^1.4.8"
+django-import-export = "^2.5.0"
+django-debug-toolbar = "^3.2.2"
+psycopg2 = "^2.9.1"
+requests = "^2.26.0"
+django-bootstrap-v5 = "^1.0.5"
+django-bootstrap5 = "^2.1.2"
+Pillow = "^8.3.2"
+mrz = "^0.6.2"
+transliterate = "^1.10.2"
+sshtunnel = "^0.4.0"
+cloudflare = "^2.8.15"
+configparser = "^5.0.2"
+pandas = "^1.3.3"
+gunicorn = "^20.1.0"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "^1.5.7"
+pylint = "^2.10.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
