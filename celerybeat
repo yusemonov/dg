@@ -1,0 +1,15 @@
+# Absolute or relative path to the 'celery' command:
+CELERY_BIN="/home/user/.venv/bin/celery"
+#CELERY_BIN="/virtualenvs/def/bin/celery"
+
+# App instance to use
+# comment out this line if you don't use an app
+CELERY_APP="source_podliver"
+# or fully qualified:
+#CELERY_APP=".tasks:app"
+
+# Where to chdir at start.
+CELERYBEAT_CHDIR="/opt/podliver_plow-main/"
+
+# Extra arguments to celerybeat
+CELERYBEAT_OPTS="--schedule=/opt/podliver_plow-main/celerybeat-schedule"
