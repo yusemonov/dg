@@ -1,0 +1,14 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+{% if img %}
+
+    <img src="{{ img.url }}" class="img-fluid" />
+    <img src="/{{ img }}" class="img-fluid" />
+
+
+
+{% endif %}
+<img src="{{ img.url }}" class="img-fluid" />
+<img src="{{ img.url }}" class="img-fluid" />
+{% endblock %}

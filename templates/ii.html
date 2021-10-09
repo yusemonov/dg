@@ -1,0 +1,33 @@
+{% extends 'admin/base.html' %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+{% block title %}Генератор документов{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <form actions="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+            {% for field in form %}
+                {{ field.label }}
+
+        <div class="form-group row">
+            <div class="col-6">
+
+                    {{ field }}
+
+            </div>
+        </div>
+
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary" value="OK">Сгенерировать док</button>
+
+    </form>
+
+
+
+</div>
+
+{% endblock %}
