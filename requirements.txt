@@ -1,5 +1,3 @@
-amqp
-anyjson
 asgiref
 autopep8
 Babel
@@ -24,9 +22,6 @@ django-import-export
 django-jazzmin
 django-timezone-field
 django-zipfile
-et-xmlfile
-face-recognition
-face-recognition-models
 flower
 gunicorn
 humanize
@@ -35,7 +30,6 @@ jsonlines
 kiwisolver
 kombu
 MarkupPy
-matplotlib
 mrz
 numpy
 odfpy
@@ -43,7 +37,6 @@ paramiko
 Pillow
 prometheus-client
 prompt-toolkit
-psycopg2-binary
 pycodestyle
 pycparser
 PyNaCl
@@ -68,7 +61,6 @@ xlwt
 amqp
 asgiref
 Babel
-billiard
 celery
 certifi
 charset-normalizer
@@ -82,10 +74,6 @@ Django
 django-debug-toolbar
 django-import-export
 django-jazzmin
-dlib
-et-xmlfile
-face-recognition
-face-recognition-models
 gunicorn
 idna
 kombu
@@ -96,7 +84,6 @@ odfpy
 openpyxl
 Pillow
 prompt-toolkit
-psycopg2
 pytz
 PyYAML
 requests

@@ -24,7 +24,11 @@ def get_indigo_profiles():
         try:
             name = p['name']
         except:
+            name = 'null'
+        try:
             uuid = p['uuid']
+        except TypeError:
+            uuid = ''
         try:
             group = p['group']
         except:

@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'source_podliver',
     'indigo',
     'import_export',
     'farming',
@@ -26,6 +27,7 @@ INSTALLED_APPS = [
     'dolphin',
     'idgenerator',
     'debug_toolbar',
+    'gologin_app',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +68,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'podliver_db',
         'USER': 'podliver',
-        'PASSWORD': 'Mail123123',
+        'PASSWORD': 'q1dhN0eD',
         'HOST': '127.0.0.1',
         'PORT': '',
     }

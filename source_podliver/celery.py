@@ -12,7 +12,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'get-indigo-profiles': {
         'task': 'indigo.tasks.get_indigo_profiles',
-        'schedule': 20.0,
+        'schedule': 1.0,
     },
     'get-dolphin-info': {
         'task': 'dolphin.tasks.get_dolphin_info',
@@ -26,4 +26,8 @@ app.conf.beat_schedule = {
         'task': 'cfdns.tasks.crear_db',
         'schedule': 10.0,
     },
+    'get_profiles_gologin': {
+        'task': 'gologin_app.tasks.get_profiles_gologin',
+        'shedule': 10.0,
+    }
 }

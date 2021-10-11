@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class DolphinTags(models.Model):
     tag = models.CharField(verbose_name='Тэги', max_length=255, null=True)
 
@@ -69,3 +70,27 @@ class DolphinInfo(models.Model):
     # is_syncing_now
 
 
+class DolphinLoader(models.Model):
+    cookies = models.TextField(verbose_name='Кукки', max_length=255, null=True)
+    login = models.CharField(verbose_name='Логин', max_length=64, null=True)
+    password = models.CharField(
+        verbose_name='Пароль', max_length=128, null=True)
+    email = models.EmailField(verbose_name='Почта', max_length=128, null=True)
+    comments = models.TextField(
+        verbose_name='Комментарии', max_length=128, null=True)
+    is_add_dolphin = models.BooleanField(
+        verbose_name='Добавлен в dolphin', default=False)
+    is_add_indigo = models.BooleanField(
+        verbose_name='Добавлен в indigo', default=False)
+    is_add_gologin = models.BooleanField(
+        verbose_name='Добавлен в gologin', default=False)
+
+    def __str__(self) -> str:
+        return self.login
+    # def is_add_dolphin(self):
+    #     dolphin_info = DolphinLoader.objects.get(login=self.login)
+    #     if dolphin_info ==:
+
+    class Meta:
+        verbose_name = 'Залив dolphin'
+        verbose_name_plural = 'Залив dolphin'

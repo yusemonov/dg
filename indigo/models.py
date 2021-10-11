@@ -66,7 +66,3 @@ class ListsProxy(models.Model):
     class Meta:
         verbose_name = 'Прокси лист'
         verbose_name_plural = 'Прокси лист'
-
-
-class Gologin(models.Model):
-    profile_id = models.CharField(max_length=255)

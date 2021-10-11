@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, unicode_literals
 
 from cfdns.models import *
 from django.contrib import admin
@@ -10,15 +11,24 @@ from dolphin.models import *
 from farming.models import *
 from fbprofiles.models import *
 from idgenerator.models import *
+from django.urls import path
+
 
 from indigo.models import *
 import pickle
+
+# Действия администратора
 
 
 def create_id(model, request, queryset):
     opts = Doc._meta.get_fields()
 
     print(opts)
+
+
+@admin.action(description='Загрузить в дельфин')
+def dolphin_loader(modeladmin, request, queryset):
+    queryset.update(is_add_dolphin=True)
 
 
 class AccountsFacebookAdmin(admin.ModelAdmin):
@@ -67,6 +77,31 @@ class DocAdmin(admin.ModelAdmin):
     actions = [create_id]
 
 
+class DolphinLoaderAdmin(admin.ModelAdmin):
+    list_display = ['cookies', 'login', 'password', 'email', 'comments',
+                    'is_add_dolphin', 'is_add_indigo', 'is_add_gologin']
+    readonly_fields = ['is_add_dolphin', 'is_add_indigo', 'is_add_gologin']
+    actions = [dolphin_loader]
+
+# @admin.register(DolphinLoader)
+# class DolphinLoaderAdmin(admin.ModelAdmin):
+#     change_list_template = "admin/monitor_change_list.html"
+
+#     def get_urls(self):
+#         urls = super(DolphinLoaderAdmin, self).get_urls()
+#         custom_urls = [
+#             path('check_token/', self.check_token, name='check_token')
+#             ]
+#         return custom_urls + urls
+
+#     def check_token_btmp(self, request):
+#         check_token = TokenCheck()
+#         count = check_token.import_data()
+#         self.message_user(request, f"создано {count} новых записей")
+#         return HttpResponseRedirect("../")
+
+
+admin.site.register(DolphinLoader, DolphinLoaderAdmin)
 admin.site.register(Domains, DomainsAdmin)
 admin.site.register(ProfileCreditations, ProfileCreditationsAdmin)
 admin.site.register(AccountsFacebook, AccountsFacebookAdmin)
@@ -76,7 +111,7 @@ admin.site.register(DolphinInfo, DolphinInfoAdmin)
 admin.site.register(DolphinPermissions)
 admin.site.register(Cookies)
 admin.site.register(Doc, DocAdmin)
-admin.site.register(Gologin)
+# admin.site.register(Gologin)
 admin.site.register(FarmStages)
 admin.site.register(AccountFarming, AccountFarmingAdmin)
 admin.site.site_header = 'a13 PowerTool'
