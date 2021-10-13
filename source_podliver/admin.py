@@ -1,23 +1,11 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
-from cfdns.models import *
 from django.contrib import admin
-from django.contrib.contenttypes.models import ContentType
-from django.core import serializers
-from django.http import HttpResponseRedirect
-from django.http.response import HttpResponse
+from cfdns.models import *
 from dolphin.models import *
 from farming.models import *
 from fbprofiles.models import *
 from idgenerator.models import *
-from django.urls import path
-
-
+from gologin_app.models import GoProfiles
 from indigo.models import *
-import pickle
-
-# Действия администратора
 
 
 def create_id(model, request, queryset):
@@ -83,6 +71,30 @@ class DolphinLoaderAdmin(admin.ModelAdmin):
     readonly_fields = ['is_add_dolphin', 'is_add_indigo', 'is_add_gologin']
     actions = [dolphin_loader]
 
+
+class GoProfilesAdmin(admin.ModelAdmin):
+    list_display = [
+        'name',
+        'role',
+        'id',
+        'notes',
+        'browserType',
+        'lockEnabled',
+        'timezone',
+        'navigator',
+        'geolocation',
+        'canBeRunning',
+        'os',
+        'proxy',
+        'proxyType',
+        'folders',
+        'sharedEmails',
+        'shareId',
+        'createdAt',
+        'updatedAt',
+        'lastActivity',
+
+    ]
 # @admin.register(DolphinLoader)
 # class DolphinLoaderAdmin(admin.ModelAdmin):
 #     change_list_template = "admin/monitor_change_list.html"
@@ -111,7 +123,7 @@ admin.site.register(DolphinInfo, DolphinInfoAdmin)
 admin.site.register(DolphinPermissions)
 admin.site.register(Cookies)
 admin.site.register(Doc, DocAdmin)
-# admin.site.register(Gologin)
+admin.site.register(GoProfiles, GoProfilesAdmin)
 admin.site.register(FarmStages)
 admin.site.register(AccountFarming, AccountFarmingAdmin)
 admin.site.site_header = 'a13 PowerTool'

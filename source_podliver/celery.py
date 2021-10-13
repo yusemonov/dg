@@ -10,24 +10,28 @@ app.autodiscover_tasks()
 
 
 app.conf.beat_schedule = {
-    'get-indigo-profiles': {
-        'task': 'indigo.tasks.get_indigo_profiles',
+    # 'get-indigo-profiles': {
+    #     'task': 'indigo.tasks.get_indigo_profiles',
+    #     'schedule': 60.0,
+    # },
+    # 'get-dolphin-info': {
+    #     'task': 'dolphin.tasks.get_dolphin_info',
+    #     'schedule': 15.0,
+    # },
+    # 'make-published': {
+    #     'task': 'cfdns.tasks.make_published',
+    #     'schedule': 10.0,
+    # },
+    # 'clear-db': {
+    #     'task': 'cfdns.tasks.crear_db',
+    #     'schedule': 10.0,
+    # },
+    'crear-db-gologin': {
+        'task': 'gologin_app.tasks.crear_db_gologin',
         'schedule': 1.0,
-    },
-    'get-dolphin-info': {
-        'task': 'dolphin.tasks.get_dolphin_info',
-        'schedule': 40.0,
-    },
-    'make-published': {
-        'task': 'cfdns.tasks.make_published',
-        'schedule': 10.0,
-    },
-    'clear-db': {
-        'task': 'cfdns.tasks.crear_db',
-        'schedule': 10.0,
     },
     'get_profiles_gologin': {
         'task': 'gologin_app.tasks.get_profiles_gologin',
-        'shedule': 10.0,
+        'schedule': 1.0,
     }
 }
