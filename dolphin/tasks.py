@@ -29,10 +29,13 @@ def get_dolphin_info():
         business_access_token = d['business_access_token']
         login = d['login']
         password = d['password']
+        status = d['status']
         if DolphinInfo.objects.filter(id=dolphin_id).exists():
             continue
+        elif DolphinInfo.objects.filter(status='-') == '-':
+            DolphinInfo.objects.update(status=status)
+            return "Статус обновился"
         else:
-            DolphinInfo.objects.create(dolphin_id=dolphin_id, user_id=user_id, group_id=group_id,
-                                       proxy_id=proxy_id, name=name, notes=notes, user_agent=user_agent, access_token=access_token, business_access_token=business_access_token, login=login, password=password)
-
-
+            DolphinInfo.objects.update_or_create(dolphin_id=dolphin_id, user_id=user_id, group_id=group_id,
+                                                 proxy_id=proxy_id, name=name, notes=notes, user_agent=user_agent, status=status, access_token=access_token, business_access_token=business_access_token, login=login, password=password)
+        return str('status', status)

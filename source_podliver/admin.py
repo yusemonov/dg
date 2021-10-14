@@ -1,23 +1,14 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
-from cfdns.models import *
 from django.contrib import admin
-from django.contrib.contenttypes.models import ContentType
-from django.core import serializers
-from django.http import HttpResponseRedirect
-from django.http.response import HttpResponse
+from cfdns.models import *
 from dolphin.models import *
 from farming.models import *
 from fbprofiles.models import *
 from idgenerator.models import *
-from django.urls import path
-
-
+from gologin_app.models import GoProfiles
 from indigo.models import *
-import pickle
-
-# Действия администратора
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin, ImportExportActionModelAdmin
+import tablib
 
 
 def create_id(model, request, queryset):
@@ -52,7 +43,8 @@ class IndigoProfileAdmin(admin.ModelAdmin):
 
 
 class DolphinInfoAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user_id',)
+    list_display = ['status', 'name', 'user_id', ]
+    list_filter = ['status', ]
 
 
 class ProfileCreditationsAdmin(admin.ModelAdmin):
@@ -83,6 +75,30 @@ class DolphinLoaderAdmin(admin.ModelAdmin):
     readonly_fields = ['is_add_dolphin', 'is_add_indigo', 'is_add_gologin']
     actions = [dolphin_loader]
 
+
+class GoProfilesAdmin(admin.ModelAdmin):
+    list_display = [
+        'name',
+        'role',
+        'id',
+        'notes',
+        'browserType',
+        'lockEnabled',
+        'timezone',
+        'navigator',
+        'geolocation',
+        'canBeRunning',
+        'os',
+        'proxy',
+        'proxyType',
+        'folders',
+        'sharedEmails',
+        'shareId',
+        'createdAt',
+        'updatedAt',
+        'lastActivity',
+
+    ]
 # @admin.register(DolphinLoader)
 # class DolphinLoaderAdmin(admin.ModelAdmin):
 #     change_list_template = "admin/monitor_change_list.html"
@@ -101,6 +117,35 @@ class DolphinLoaderAdmin(admin.ModelAdmin):
 #         return HttpResponseRedirect("../")
 
 
+class FarmSheetsResource(resources.ModelResource):
+
+    class Meta:
+        model = FarmSheets
+        skip_unchanged = True
+        report_skipped = True
+        # fields = ('f_name', 'creditals', 'phone',
+        #           'login_password', 'profile_url', 'dob')
+        export_order = ['status', 'f_name', 'creditals', 'phone',
+                        'login_password', 'profile_url', 'dob', 'bm_ur']
+        exclude = ('invite_to_bm')
+        # import_id_fields = ('creditals')
+
+
+class FarmSheetsAdmin(ImportExportModelAdmin):
+    resource_class = FarmSheetsResource
+
+    list_display = ['status', 'f_name', 'creditals',
+                    'phone', 'login_password', 'profile_url', 'dob', 'bm_ur']
+    # list_display_links = ['status', 'f_name', 'creditals',
+    #                       'phone', 'login_password', 'profile_url', 'dob', 'bm_ur']
+
+
+def get_status():
+    value = FarmSheets.objects.all()
+    print(value)
+
+
+admin.site.register(FarmSheets, FarmSheetsAdmin)
 admin.site.register(DolphinLoader, DolphinLoaderAdmin)
 admin.site.register(Domains, DomainsAdmin)
 admin.site.register(ProfileCreditations, ProfileCreditationsAdmin)
@@ -111,83 +156,10 @@ admin.site.register(DolphinInfo, DolphinInfoAdmin)
 admin.site.register(DolphinPermissions)
 admin.site.register(Cookies)
 admin.site.register(Doc, DocAdmin)
-# admin.site.register(Gologin)
+admin.site.register(GoProfiles, GoProfilesAdmin)
 admin.site.register(FarmStages)
 admin.site.register(AccountFarming, AccountFarmingAdmin)
 admin.site.site_header = 'a13 PowerTool'
 admin.site.site_title = 'a13 PowerTool'
 create_id.short_description = "Create id"
 admin.site.add_action(create_id)
-# admin.site.add_action(make_published, 'export_selected')
-# admin.site.add_action(export_as_json)
-# admin.site.register(Farm, FarmAdmin)
-# @admin.action(description='Создать профили в индиго')
-# def export_as_json(modeladmin, request, queryset):
-#     opts = modeladmin.model._meta
-#     fields = [field for field in opts.get_fields(
-#     ) if not field.many_to_many and not field.one_to_many]
-#     for obj in queryset:
-#         # for field in fields:
-#         name = obj.name
-#         browser = obj.browser
-#         os = obj.os
-#         notes = obj.notes
-#         # value = getattr(obj, field.name)
-#     body = {
-#         "name": name,
-#         "browser": browser,
-#         "os": os,
-#         "notes": notes,
-#     }
-#     headers = {
-#         'accept': 'application/json',
-#         'Content-Type': 'application/json'
-#     }
-#     url = 'http://localhost.multiloginapp.com:45000/api/v2/profile'
-#     # json_data = json.dumps(body)
-#     request = requests.post(url, data=json.dumps(body), headers=headers)
-#     out = request.json()
-#     res = out['uuid']
-#     u = IndigoProfile.objects.get(name=body['name'])
-#     u.uuid = res
-#     u.is_add = True
-#     u.save()
-
-
-# class FarmAdmin(admin.ModelAdmin):
-#     list_display = ('farmer', 'get_farm_stages', 'get_accounts_facebook',)
-#     list_display_links = ('farmer', 'get_accounts_facebook',)
-
-
-# @admin.display(description='Аккаунт фб')
-# def get_accounts_facebook(self, obj):
-#     return format(obj.accounts_facebook)
-
-# @admin.display(description='Стадия Фарма')
-# def get_farm_stages(self, obj):
-#     return format(obj.farm_stages)
-# @admin.action(description='Get dns', permissions=['change'])
-# def make_published(self, request, queryset):
-#     cf = CloudFlare.CloudFlare(
-#         email='whitetech.lp@gmail.com', token='ff029fbbc9b791bac44bba34f88b3738bea3f')
-#     zones = cf.zones.get()
-#     for zone in zones[0:20]:
-
-#         name = zone.get('name')
-#         status = zone.get('status')
-#         paused = zone.get('paused')
-#         type = zone.get('type')
-#         development_mode = zone.get('development_mode')
-#         name_servers = zone.get('name_servers')
-#         original_name_servers = zone.get('original_name_servers')
-#         original_registrar = zone.get('original_registrar')
-#         original_dnshost = zone.get('original_dnshost')
-#         modified_on = zone.get('modified_on')
-#         created_on = zone.get('created_on')
-#         activated_on = zone.get('activated_on')
-#         meta = zone.get('meta')
-#         owner = zone.get('owner')
-#         account = zone.get('account')
-#         permissions = zone.get('permissions')
-#         updated = queryset.update(name=name)
-#         self.message_user(request, updated, messages.SUCCESS)

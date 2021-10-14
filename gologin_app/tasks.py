@@ -1,81 +1,61 @@
 import os
-from dotenv import load_dotenv
 from gologin_app.gologin.gologin import GoLogin
 from celery import shared_task
 from .models import *
-load_dotenv('../.env')
+import json
 
 
 @shared_task
 def get_profiles_gologin():
-    TOKEN_GOLOGIN = os.getenv('TOKEN')
     gl = GoLogin({
-        'token': TOKEN_GOLOGIN
-    })
+        'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGU0NjBhZGQyMDk3OWYyZmEwNmE2ZDEiLCJ0eXBlIjoiZGV2Iiwiand0aWQiOiI2MTY0MGFhZjAyMmUxYTI1ZTcyZjA0NmUifQ.6L85fs-NvcqnvxluRDrDHexMKqkWTO0KHGUYMzbW6Og'})
 
-    profile_list = gl.profiles()
-    for p in profile_list:
-        name = p['name']
-        role = p['role']
-        gologin_id = p['id']
-        notes = p['notes']
-        browserType = p['browserType']
-        lockEnabled = p['lockEnabled']
-        timezone = p['timezone']
-        navigator = p['navigator']
-        language = p['language']
-        geolocation = p['geolocation']
-        enabled = p['enabled']
-        customize = p['customize']
-        fillBasedOnIp = p['fillBasedOnIp']
-        latitude = p['latitude']
-        longitude = p['longitude']
-        accuracy = p['accuracy']
-        canBeRunning = p['canBeRunning']
-        os = p['os']
-        proxy = p['proxy']
-        host = p['host']
-        port = p['port']
-        username = p['username']
-        password = p['password']
-        autoProxyRegion = p['autoProxyRegion']
-        torProxyRegion = p['torProxyRegion']
-        proxyType = p['proxyType']
-        folders = p['folders']
-        sharedEmails = p['sharedEmails']
-        shareId = p['shareId']
-        createdAt = p['createdAt']
-        updatedAt = p['updatedAt']
-        lastActivity = p['lastActivity']
-        if GoProfiles.objects.get(gologin_id=gologin_id).exists():
+    json_data = gl.profiles()
+    for x in json_data:
+        name = x['name']
+        role = x['role']
+        gologing_id = x['id']
+        notes = x['notes']
+        browserType = x['browserType']
+        lockEnabled = x['lockEnabled']
+        timezone = x['timezone']
+        navigator = x['navigator']
+        geolocation = x['geolocation']
+        canBeRunning = x['canBeRunning']
+        os = x['os']
+        proxy = x['proxy']
+        try:
+            proxyType = x['proxyType']
+        except KeyError:
+            proxyType = 'NULL'
+        try:
+            folders = x['folders']
+        except:
+            folders = 'NULL'
+        sharedEmails = x['sharedEmails']
+        shareId = x['shareId']
+        createdAt = x['createdAt']
+        updatedAt = x['updatedAt']
+        try:
+            lastActivity = x['lastActivity']
+        except:
+            lastActivity = 'NULL'
+        if GoProfiles.objects.filter(gologing_id=gologing_id).exists():
             continue
         else:
             GoProfiles.objects.create(
                 name=name,
                 role=role,
-                gologin_id=gologin_id,
+                gologing_id=gologing_id,
                 notes=notes,
                 browserType=browserType,
                 lockEnabled=lockEnabled,
                 timezone=timezone,
                 navigator=navigator,
-                language=language,
                 geolocation=geolocation,
-                enabled=enabled,
-                customize=customize,
-                fillBasedOnIp=fillBasedOnIp,
-                latitude=latitude,
-                longitude=longitude,
-                accuracy=accuracy,
                 canBeRunning=canBeRunning,
                 os=os,
                 proxy=proxy,
-                host=host,
-                port=port,
-                username=username,
-                password=password,
-                autoProxyRegion=autoProxyRegion,
-                torProxyRegion=torProxyRegion,
                 proxyType=proxyType,
                 folders=folders,
                 sharedEmails=sharedEmails,
@@ -84,9 +64,10 @@ def get_profiles_gologin():
                 updatedAt=updatedAt,
                 lastActivity=lastActivity,
             )
-            return "Добавлен профиль"
 
 
-# @app.task
-# def create_user(username, password):
-#     User.objects.create(username=username, password=password)
+@shared_task
+def crear_db_gologin():
+    for gologing_id in GoProfiles.objects.values_list('gologing_id', flat=True).distinct():
+        GoProfiles.objects.filter(pk__in=GoProfiles.objects.filter(
+            gologing_id=gologing_id).values_list('id', flat=True)[3:]).delete()
