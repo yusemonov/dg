@@ -1,0 +1,13 @@
+# podliver_plow
+
+ACCOUNTS:
+
+FB|GOGLE #(cookie include*),
+PROXY,
+INDIGO,
+GOLOGIN,
+DOLPHIN-ANTI,
+SYNC STATUS;
+STATISTIC:
+DOLPHIN
+PAYMENTS
